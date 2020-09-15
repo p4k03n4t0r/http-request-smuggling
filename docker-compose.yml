@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  haproxy:
+    build: haproxy
+    ports:
+      - "8001:8001"
+    links:
+      - "server"
+  mitmproxy:
+    build: mitmproxy
+    ports:
+      - "8002:8002"
+    links:
+      - "server"
+  squidproxy:
+    build: squidproxy
+    ports:
+      - "8003:8003"
+    links:
+      - "server"
+  server:
+    build: gunicornserver
