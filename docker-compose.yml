@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   haproxy:
@@ -7,12 +7,18 @@ services:
       - "8001:8001"
     links:
       - "server"
+    environment:
+      - SERVER_HOSTNAME=server
+      - SERVER_PORT=8000
   mitmproxy:
     build: mitmproxy
     ports:
       - "8002:8002"
     links:
       - "server"
+    environment:
+      - SERVER_HOSTNAME=server
+      - SERVER_PORT=8000
   squidproxy:
     build: squidproxy
     ports:

