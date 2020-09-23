@@ -1,3 +1,8 @@
 # http-request-smuggling-demo
 
-https://aws.amazon.com/about-aws/whats-new/2020/08/application-and-classic-load-balancers-adding-defense-in-depth-with-introduction-of-desync-mitigation-mode/
+Simple demo of http request smuggling. There are two examples:
+
+- TE-CL: Mitmproxy (TE) -> Gunicorn (CL)
+- CL-TE: HAProxy (CL) -> Gunicorn (TE)
+
+To try it out spin up the environment using docker-compose. Use the clients in the demo-clients folder to get a working example of request smuggling.
