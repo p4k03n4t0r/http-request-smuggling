@@ -2,3 +2,5 @@ __pycache__
 *.pyc
 aws/
 pushcontainer.sh
+scan-docker-image.sh
+scan.sh

@@ -5,8 +5,7 @@ import socket
 HOST = 'example.com'
 PORT = 80
 
-msg = f"""
-GET / HTTP/1.1
+msg = f"""GET / HTTP/1.1
 HOST: {HOST}
 
 """.encode("ascii")
@@ -16,9 +15,8 @@ print(f"We are going to send: {msg}")
 
 async def receive(sock):
     send(sock, msg)
-    while True:
-        response = sock.recv(100).decode("ascii")
-        print(response)
+    response = sock.recv(500).decode("ascii")
+    print(response)
 
 
 def send(sock, msg):
