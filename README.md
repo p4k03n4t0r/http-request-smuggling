@@ -24,7 +24,7 @@ Although the specification seems to be quite clear, it still depends on the deve
 
 So, what will happen if I can trick a proxy into using the content length and the server using chunked encoding? They will have different interpretations of the length of the body. We can abuse this, as can be seen in the following example:
 
-```
+```http
 GET /hello HTTP/1.1
 Host: mywebsite.com
 Content-Length: 11
@@ -59,14 +59,14 @@ Mitmproxy checks whether `chunked` is in the header, while Gunicorn checks wheth
 
 The blogpost nicely describes how this can be exploited in the CTF, but I thought it would be better to simplify the setup and write my own exploit. In this repository I created this setup using Docker and Python clients to execute the request smuggling. The question still remains how can we abuse this mismatch between the proxy and the server? In the demo setup I made we have a `/flag` endpoint which returns a secret which is only reachable from within the network, because the proxy blocks the request:
 
-```
-> curl localhost:8002/flag
+```shell
+$ curl localhost:8002/flag
 Forbidden, but nice try ;)
 ```
 
 This check is done by the proxy by checking the path that is called, but this check doesn't do anything with the body. So we can make a request which looks as follows:
 
-```
+```http
 # Request
 GET /hello HTTP/1.1
 Host: 0.0.0.0:8002
@@ -91,7 +91,7 @@ Hello there
 
 The request looks quite similar to the one in the previous paragraph, except that the body is now replaced with another HTTP request. What will happen is that the proxy will think this is a single HTTP message which passes the `/flag` filter. The server meanwhile thinks the request ends with 2a (including double line breaks `\r\n`) and thinks what comes next is a new HTTP request. What follows is a valid HTTP request calling the `/flag` endpoint, returning the response to the proxy. But there is still a problem left, since the proxy thinks it only received a single request from the user, it will only return a single response. So although the proxy received two respones from the server, it thinks it only has to return a single response, leaving our `/flag` response hanging at the proxy. The solution to still get back this response is quiet simple:
 
-```
+```http
 # Request
 GET /hello HTTP/1.1
 Host: 0.0.0.0:8002
